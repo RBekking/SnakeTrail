@@ -1,5 +1,3 @@
-#
-#
 #!python3.exe
 # Tested with python 3.6.1
 
@@ -56,10 +54,7 @@ class Crawler:
         else:
             return False
 
-    def fetch(self, how_many_per_session=0):
-        if how_many_per_session == 0:
-            how_many_per_session = self.maxcomponents
-
+    def fetch(self, how_many_per_session):
         return_value = []
         num_rows = self.get_rows()
 
@@ -115,4 +110,14 @@ class FarnellCrawler(Crawler):
             datasheet_link              = self.parse_tree.xpath(data_root + '//a[@class="prodDetailsAttachment"]/@href')[0]
             moq                         = self.parse_tree.xpath(data_root + '//span[@class="qty"]/text()')[0]
             unit_price                  = self.parse_tree.xpath(data_root + '//span[@class="qty_price_range"]/text()')[0]
-            stock                       = self.parse_tree.xpath(data_root + '//span[@
+            stock                       = self.parse_tree.xpath(data_root + '//span[@class="inStockBold"]/text()')[0].strip().replace('.', '')
+            num_parameters              = len(self.parse_tree.xpath('//div[@id="prodInfoOverlay_%s"]//table[@class="TFtable"]//tr' % sup_part_num))
+
+            for attribute in range(1, num_parameters + 1):
+                a = self.parse_tree.xpath('//div[@id="prodInfoOverlay_%s"]//table[@class="TFtable"]//tr[%d]/td[1]/text()' % (sup_part_num, attribute))[0].strip()
+                b = self.parse_tree.xpath('//div[@id="prodInfoOverlay_%s"]//table[@class="TFtable"]//tr[%d]/td[2]/b/text()' % (sup_part_num, attribute))[0].strip()
+                parameter_dict[a] = b
+        except:
+            print('No data to parse...')
+
+        return mfr, mfr_part_num, sup, sup_part_num, description, datasheet_link, moq, unit_price, stock, parameter_dict

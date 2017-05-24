@@ -1,5 +1,3 @@
-#
-#
 #!python3.exe
 # Tested with python 3.6.1
 
