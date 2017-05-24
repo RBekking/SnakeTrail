@@ -56,29 +56,4 @@ while True:
     Resistors = [AltiumComponent('=Resistance', 'Resistor', 'RESC1608X06N (0603)', 'Schematic\Symbols_ElektorStyle.SchLib', 'PCB resistors.PcbLib', 2).create(line) for line in response]
     ResistorTable.save(Resistors)
 
-exit()
-
-if num_entries == 0:
-    print('Nothing to do...')
-    exit()
-
-try:
-    while num_entries > 0:
-        print("[page %d / %d] Found %d Entries" % (current_page, max_pages, num_entries))
-        resistor_list = [Farnell_Component() for i in range(num_entries)]
-        for i in range(num_entries):
-            resistor_list[i].parse(tree, i + 1)
-            print(resistor_list[i])
-
-        Storage.save(resistor_list, num_entries)
-
-        smd_resistor_page = get_next_page(tree)
-        if smd_resistor_page == '': break
-        tree = html.fromstring(requests.get(smd_resistor_page, filters).content)
-        num_entries = get_entries(tree)
-        current_page += 1
-
-finally:
-    Storage.close()
-
 print('Done...')

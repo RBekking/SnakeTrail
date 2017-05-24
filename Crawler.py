@@ -58,6 +58,9 @@ class Crawler:
         return_value = []
         num_rows = self.get_rows()
 
+        if how_many_per_session == 0:
+            how_many_per_session = self.maxcomponents
+
         if num_rows == 0:
             print('[%s] Nothing to do...' % time.asctime(time.localtime()))
             return []
@@ -66,6 +69,7 @@ class Crawler:
         while (self.__cumulative_row - line_counter) < how_many_per_session:
             if self.__cumulative_row >= self.maxcomponents:
                 break
+                
             self.__cumulative_row += 1
 
             return_value.append(self.parse_row(self.__current_row))

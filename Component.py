@@ -71,4 +71,4 @@ class AltiumComponent(Component):
         self.common_data['Stock']                       = crawler_data[8]
         self.parameter_dict                             = crawler_data[9]
 
-        return self.common_data, self.parameter_dict
+        return [self.common_data, self.parameter_dict]
